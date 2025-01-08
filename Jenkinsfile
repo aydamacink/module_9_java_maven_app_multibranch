@@ -10,7 +10,7 @@ library identifier: 'jenkins-shared-library@master', retriever: modernSCM(
 pipeline {
     agent any
     tools {
-        maven 'maven-3.9.9'
+        maven 'Maven'
     }
     stages {
         stage('increment version') {
