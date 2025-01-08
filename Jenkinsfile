@@ -21,6 +21,9 @@ pipeline {
 
         stage("deploy") {
             steps {
+                sshagent(['ec2-user']) {
+                    sh 'ssh-add -l' // Lists loaded SSH keys
+                }
                 script {
                     def dockerCmd = 'docker run -p 3080:3080 -d dm1984/demo-app:1.1.1-7'
                     sshagent(['ec2-server-key']) {
