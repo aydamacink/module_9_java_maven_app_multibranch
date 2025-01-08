@@ -21,7 +21,7 @@ pipeline {
 
         stage("deploy") {
             steps {
-                sshagent(['ec2-user']) {
+                sshagent(['ec2-server-key']) {
                     sh 'ssh-add -l' // Lists loaded SSH keys
                 }
                 script {
