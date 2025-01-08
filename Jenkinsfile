@@ -25,9 +25,9 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                             sh """
                             ssh -o StrictHostKeyChecking=no ec2-user@18.194.125.89 <<EOF
-                            docker login -u $DOCKER_USER -p $DOCKER_PASS
-                            ${dockerCmd}
-                            EOF
+docker login -u $DOCKER_USER -p $DOCKER_PASS
+${dockerCmd}
+EOF
                             """
                         }
                     }
