@@ -15,7 +15,8 @@ pipeline {
                         versions:commit'
                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                     def version = matcher[0][1]
-                    env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+                    env.TAG_NAME = "$version-$BUILD_NUMBER"
+                    env.IMAGE_REPO = "dm1984/demo-app"
                 }
             }
         }
@@ -30,9 +31,9 @@ pipeline {
                 script {
                     echo 'building the docker image...'
                     def docker = new com.example.Docker(this) // Create an instance of Docker class
-                    docker.buildDockerImage(env.IMAGE_NAME)
+                    docker.buildDockerImage(env.TAG_NAME)
                     docker.dockerLogin()
-                    docker.dockerPush(env.IMAGE_NAME)
+                    docker.dockerPush("$env.IMAGE_REPO:$env.TAG_NAME")
                 }
             }
         } 
@@ -41,7 +42,7 @@ pipeline {
                 script {
                     echo 'deploying docker image to EC2...'
 
-                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+                    def shellCmd = "bash ./server-cmds.sh ${TAG_NAME}"
                     def ec2Instance = "ec2-user@18.194.125.89"
 
                     sshagent(['ec2-server-key']) {
