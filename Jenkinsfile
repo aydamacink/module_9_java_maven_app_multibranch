@@ -1,10 +1,4 @@
-#!/usr/bin/env groovy
-
-library identifier: 'jenkins-shared-library@main', retriever: modernSCM(
-    [$class: 'GitSCMSource',
-    remote: 'https://github.com/aydamacink/jenkins_shared_library.git'
-    ]
-)
+@Library('jenkins-shared-library@main') _
 
 pipeline {
     agent any
@@ -35,10 +29,10 @@ pipeline {
             steps {
                 script {
                     echo 'building the docker image...'
-            
-                    buildDockerImage(env.IMAGE_NAME)
-                    dockerLogin()
-                    dockerPush(env.IMAGE_NAME)
+                    def docker = new com.example.Docker(this) // Create an instance of Docker class
+                    docker.buildDockerImage(env.IMAGE_NAME)
+                    docker.dockerLogin()
+                    docker.dockerPush(env.IMAGE_NAME)
                 }
             }
         } 
@@ -58,10 +52,10 @@ pipeline {
                 }
             }               
         }
-        stage('commit version update'){
+        stage('commit version update') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]){
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                         sh 'git remote set-url origin https://$USER:$PASS@github.com/module_9_java_maven_app_multibranch'
                         sh 'git add .'
                         sh 'git commit -m "ci: version bump"'
