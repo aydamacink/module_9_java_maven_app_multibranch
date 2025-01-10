@@ -35,10 +35,10 @@ pipeline {
             steps {
                 script {
                     echo 'building the docker image...'
-                    def docker = new com.Docker(this)
-                    docker.buildDockerImage(env.IMAGE_NAME)
-                    docker.dockerLogin()
-                    docker.dockerPush(env.IMAGE_NAME)
+            
+                    buildDockerImage(env.IMAGE_NAME)
+                    dockerLogin()
+                    dockerPush(env.IMAGE_NAME)
                 }
             }
         } 
