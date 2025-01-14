@@ -57,7 +57,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'git remote set-url origin https://$USER:$PASS@github.com/module_9_java_maven_app_multibranch'
+                        sh 'git remote set-url origin https://$USER:$PASS@github.com/aydamacink/module_9_java_maven_app_multibranch'
                         sh 'git add .'
                         sh 'git commit -m "ci: version bump"'
                         sh 'git push origin HEAD:jenkins-jobs'
