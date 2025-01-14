@@ -31,7 +31,7 @@ pipeline {
                 script {
                     echo 'building the docker image...'
                     def docker = new com.example.Docker(this) // Create an instance of Docker class
-                    docker.buildDockerImage(env.TAG_NAME)
+                    docker.buildDockerImage("${env.IMAGE_REPO}:${env.TAG_NAME}")
                     docker.dockerLogin()
                     docker.dockerPush("$env.IMAGE_REPO:$env.TAG_NAME")
                 }
